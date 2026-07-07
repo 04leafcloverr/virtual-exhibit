@@ -19,7 +19,7 @@
 
 # Original Project Proposal
 
-...
+---
 
 ## Title of Project:
 ## Alice Through the Snooping Bus: A Wonderland of Cache Coherence
