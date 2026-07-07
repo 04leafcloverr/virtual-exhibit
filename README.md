@@ -1,0 +1,55 @@
+# CSARCH2 GROUP 1 S40 INCREMENTAL README
+
+## Mid-Milestone Development
+
+### Aha Moments
+- 
+
+### Things Learned
+- Basic Astro project structure.
+
+### Challenges
+- Learning Astro while simultaneously planning the exhibit.
+- Translating a complex computer architecture topic into an educational exhibit.
+
+### Creative Development
+- Refined the original idea by representing CPU cores as Classic Alice and Hysteria Alice, making the cache coherence process easier to visualize.
+
+---
+
+# Original Project Proposal
+
+...
+
+## Title of Project:
+## Alice Through the Snooping Bus: A Wonderland of Cache Coherence
+
+## Project Theme:
+Cache Coherence (MESI Protocol). Our exhibit will explore how multi-core processors communicate to maintain data consistency, using American McGee’s Alice and Alice: Madness Returns video games as a guiding metaphor. <br><br> The core mechanism we wish to explain is the Snooping Bus, which is a broadcast medium where cores announce their memory operations for all processors to observe. In our exhibit, the two “cores” are Classic Alice and Hysteria Alice—two personalities inhabiting the same mind (shared Main Memory). <br><br> When Hysteria Alice corrupts a memory (Write), she broadcasts this corruption across the looking-glass snooping bus. <br> Classic Alice snoops this broadcast and is forced to instantly invalidate her old, happy memory to prevent cognitive dissonance. <br><br>With this simulation, users take on the roles of both personalities, selecting Remember (Read) and Corrupt (Write) commands, and sending shattered memories across the looking-glass snooping bus, triggering real-time MESI state transitions that demonstrate the cost and necessity of cache coherence.
+
+## Group Members:
+Adriano, Mark Luis B. <br>
+Besa, April Denise B. <br>
+Guerrero, Laura Mae D. <br>
+Malapitan, Ryan James C. <br>
+Pallarca, Cedric S. <br>
+
+## Tech Stack Plan:
+**Core Framework:** Astro 6 will be used to build the exhibit page, handle routing, and render the static HTML. <br>
+**Environment:** Node.js 26 runs the build process, executes Astro’s development server and manages all npm scripts.<br>
+**Content:** Markdown Extended (.mdx) contains the exhibit’s written content, imports and embeds react components using  JSX syntax directly inside the markdown.<br>
+**Interactivity:** React 18 will be used for all the interactive elements such as the hotbar, snooping bus animation and button effects.<br>
+**Styling:** TailwindCSS or standard CSS styles all UI components with utility classes.<br>
+
+## Proposed Interactive Element:
+We will build a React component that visualizes two CPU cores sharing a single block of data in order to demonstrate how the snooping bus keeps the caches synchronized. We can achieve this by setting Alice’s two personalities (Classic Alice and Hysteria Alice) as our CPU cores while her brain becomes the shared RAM. <br><br> Features include:
+Dual personality hotbar. The screen is split between Classic Alice (Core 0, wearing her signature blue dress) and Hysteria Alice (Core 1, dressed in white with red gloves). Each personality has a 3-slot "Memory Pocket" (cache lines). Slots display items and are colored according to MESI state: Red (Modified/Corrupted), Blue (Exclusive/Pure), Green (Shared/Remembered), or Grey (Invalid/Suppressed). <br><br>
+Read (remember) and Write (corrupt) buttons. Remember can recall a memory from the subconscious, while Corrupt can overwrite/modify it. Performing a Corrupt on Hysteria Alice’s side forces a snoop on Classic Alice’s side.<br><br>
+The Rabbit Hole Button. A vertical spiraling vortex at the bottom represents Alice's Brain (RAM). When Hysteria Alice corrupts a memory, the conscious mind (cache) is updated, but the deep subconscious remains stale until the user clicks “Embrace Sanity” (Writeback). This sends a purified memory spiraling down to stabilize the core identity.<br>
+
+## Mobile-Responsive Layout:
+The layout will use CSS Flexbox/Grid to ensure the exhibit scales down cleanly. On the desktop, the text and interactive simulator will sit side-by-side. On mobile screens (under 768px), the layout will stack vertically, with the interactive simulator pinned to the top of the viewport so users can read the .mdx text while observing the CPU animations.
+
+## Style Guide Snapshot:
+<img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/5e25059c-982a-4403-99e6-be77a02c87b2" />
+<img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/8a3864aa-57af-40dd-bf09-6dfbfc97770c" />
