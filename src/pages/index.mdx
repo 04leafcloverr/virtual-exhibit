@@ -1,0 +1,71 @@
+---
+layout: ../layouts/ExhibitLayout.astro
+title: "Alice Through the Snooping Bus"
+---
+
+import '../styles/alice.css';
+import AliceSimulator from '../components/AliceSimulator.jsx';
+
+# Alice Through the Snooping Bus
+
+## A Madness Returns Journey into Cache Coherence
+
+Welcome to our virtual exhibit! Explore how multi-core processors maintain data consistency using the **Snooping Bus** and **MESI Protocol**—visualized through the fractured psyche of *Alice: Madness Returns*.
+
+### The Metaphor
+
+| Alice Concept | Hardware Concept |
+| :--- | :--- |
+| Classic Alice (Core 0) | CPU Core 0 Cache |
+| Hysteria Alice (Core 1) | CPU Core 1 Cache |
+| Memories (Teacup, Book, Ribbon, Blade) | Cache Lines (Data) |
+| Looking-Glass Bus | Snooping Bus (Broadcast Medium) |
+| Alice's Brain | Main Memory (RAM) |
+| Remember | Read (PrRd) |
+| Corrupt | Write (BusRdX - Read for Ownership) |
+| Embrace Sanity | Writeback (WB) |
+
+### Try It Yourself!
+
+<AliceSimulator client:load />
+
+---
+
+### MESI Protocol States
+
+| State | Color | Meaning |
+| :--- | :--- | :--- |
+| **M** (Modified) | Red | Data has been changed locally and is now "dirty." Only one core can hold this state. |
+| **E** (Exclusive) | Blue | Only one core has a copy of the data. It matches Main Memory. |
+| **S** (Shared) | Green | Multiple cores have copies of the data. All copies match Main Memory. |
+| **I** (Invalid) | Grey | The data is stale and must be discarded. |
+
+---
+
+### How the Simulator Works
+
+1. **Select a slot** in either Classic Alice or Hysteria Alice's memory pocket.
+2. Click **"Remember"** to read data from Main Memory.
+3. Click **"Corrupt"** to modify data—this forces the other core to **invalidate** its copy.
+4. Click **"Embrace Sanity"** to save the modified data back to Main Memory (Writeback).
+
+Watch the **Looking-Glass Bus** for animations and the **Explanation Panel** for what's happening in both Alice and hardware terms.
+
+---
+
+### References
+
+1. Hennessy, J. L., & Patterson, D. A. (2017). *Computer Architecture: A Quantitative Approach* (6th ed.). Morgan Kaufmann.
+2. American McGee's Alice (2000). Rogue Entertainment.
+3. Alice: Madness Returns (2011). Spicy Horse.
+4. MESI Protocol. (n.d.). In *Wikipedia*. Retrieved from https://en.wikipedia.org/wiki/MESI_protocol
+
+---
+
+### Team Members
+
+- [Your Name Here]
+- [Team Member 2]
+- [Team Member 3]
+
+---
