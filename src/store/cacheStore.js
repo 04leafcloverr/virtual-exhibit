@@ -1,28 +1,27 @@
 // src/store/cacheStore.js
 import { create } from 'zustand';
 
-export const useCacheStore = create((set, get) => ({
-  // ========== MAIN MEMORY (RAM) ==========
-  mainMemory: { address: '0x0F', data: 'Teacup' },
+// All available memories
+const ALL_MEMORIES = ['Teacup', 'Knife', 'Cheshire Cat', 'Wonderland', 'Tea Party', 'Caterpillar', 'Mad Hatter', 'White Rabbit', 'Queen of Hearts', 'Dollhouse'];
 
-  // ========== CLASSIC ALICE (CORE 0) ==========
+// Create empty slots
+const createEmptySlots = () => [
+  { address: null, data: null, state: 'empty' },
+  { address: null, data: null, state: 'empty' },
+  { address: null, data: null, state: 'empty' },
+];
+
+export const useCacheStore = create((set, get) => ({
+  // ========== CORE 0 ==========
   core0: {
     name: 'Classic Alice',
-    slots: [
-      { address: null, data: null, state: 'empty' },
-      { address: null, data: null, state: 'empty' },
-      { address: null, data: null, state: 'empty' },
-    ],
+    slots: createEmptySlots(),
   },
 
-  // ========== HYSTERIA ALICE (CORE 1) ==========
+  // ========== CORE 1 ==========
   core1: {
     name: 'Hysteria Alice',
-    slots: [
-      { address: null, data: null, state: 'empty' },
-      { address: null, data: null, state: 'empty' },
-      { address: null, data: null, state: 'empty' },
-    ],
+    slots: createEmptySlots(),
   },
 
   // ========== UI STATE ==========
@@ -30,22 +29,29 @@ export const useCacheStore = create((set, get) => ({
   isBusActive: false,
   busItem: null,
   busDirection: null,
-
-  // ========== EXPLANATION PANEL ==========
+  busMessage: {
+    text: 'Bus idle... Waiting for action',
+    sub: 'Snooping for memory operations',
+    type: 'idle'
+  },
   explanation: {
-    alice: 'Welcome to Wonderland! Click "Remember" to start exploring.',
-    hardware: 'Welcome! Click "Remember" to issue a Bus Read (PrRd).',
+    alice: 'Click a slot, then "Remember" to load a memory.',
+    hardware: 'All cache lines are Invalid (I). Click "Remember" to issue a Bus Read.',
   },
+  log: ['Ready for operations...'],
 
-  // ========== TRANSACTION LOG ==========
-  log: ['Welcome to the Looking-Glass Bus...'],
-
-  // ========== SELECT A SLOT ==========
+  // ========== SELECT SLOT - FIXED ==========
   selectSlot: (core, index) => {
-    set({ selectedSlot: { core, index } });
+    console.log('selectSlot called:', { core, index });
+    // Return a NEW state object with updated selectedSlot
+    set({ 
+      selectedSlot: { core, index } 
+    });
+    // Verify it was set
+    console.log('After set, selectedSlot:', get().selectedSlot);
   },
 
-  // ========== SET EXPLANATION (Combined Text) ==========
+  // ========== SET EXPLANATION ==========
   setExplanation: (aliceText, hardwareText) => {
     set({
       explanation: {
@@ -55,151 +61,298 @@ export const useCacheStore = create((set, get) => ({
     });
   },
 
-  // ========== ADD LOG ENTRY ==========
+  // ========== ADD LOG ==========
   addLog: (entry) => {
     set((state) => ({
-      log: [...state.log, `Cycle ${state.log.length}: ${entry}`],
+      log: [`[${new Date().toLocaleTimeString()}] ${entry}`, ...state.log.slice(0, 9)],
     }));
   },
 
-  // ========== TRIGGER BUS ANIMATION ==========
-  triggerBus: (item, direction) => {
-    set({ isBusActive: true, busItem: item, busDirection: direction });
+  // ========== TRIGGER BUS ==========
+  triggerBus: (message, subMessage) => {
+    set({
+      isBusActive: true,
+      busMessage: {
+        text: message,
+        sub: subMessage,
+        type: 'read'
+      }
+    });
     setTimeout(() => {
-      set({ isBusActive: false, busItem: null, busDirection: null });
-    }, 800);
-  },
-
-  // ========== HANDLE READ (REMEMBER) ==========
-  handleRead: (coreId, slotIndex) => {
-    const state = get();
-    const core = coreId === 0 ? state.core0 : state.core1;
-    const coreName = core.name;
-    const otherCoreId = coreId === 0 ? 1 : 0;
-    const otherCore = otherCoreId === 0 ? state.core0 : state.core1;
-    const address = '0x0F';
-    const data = state.mainMemory.data;
-
-    // Check if other core has this address
-    const otherSlot = otherCore.slots.find((s) => s.address === address);
-
-    if (otherSlot && otherSlot.state !== 'empty' && otherSlot.state !== 'i') {
-      // Other core has it → Shared
-      const otherIndex = otherCore.slots.indexOf(otherSlot);
-      set((state) => {
-        if (coreId === 0) {
-          state.core0.slots[slotIndex] = { address, data, state: 's' };
-          state.core1.slots[otherIndex] = { ...state.core1.slots[otherIndex], state: 's' };
-        } else {
-          state.core1.slots[slotIndex] = { address, data, state: 's' };
-          state.core0.slots[otherIndex] = { ...state.core0.slots[otherIndex], state: 's' };
+      set({
+        isBusActive: false,
+        busMessage: {
+          text: 'Bus idle...',
+          sub: 'Waiting for next action',
+          type: 'idle'
         }
       });
+    }, 2000);
+  },
 
-      const aliceText = `${coreName} also remembered the ${data}! Both Alices share this memory.`;
-      const hardwareText = `${coreName} issued a PrRd (Bus Read). Snooped the bus and saw ${otherCore.name} already has this data. Both cache lines enter Shared (S) state.`;
-      get().setExplanation(aliceText, hardwareText);
-      get().addLog(`${coreName} read ${data} → Shared (S)`);
-      get().triggerBus('Card', coreId === 0 ? 'right' : 'left');
+  // ========== GET NEXT AVAILABLE MEMORY ==========
+  getNextMemory: () => {
+    const state = get();
+    
+    // Get all used data from both cores
+    const usedData = [];
+    state.core0.slots.forEach(s => {
+      if (s.data !== null && s.data !== undefined) usedData.push(s.data);
+    });
+    state.core1.slots.forEach(s => {
+      if (s.data !== null && s.data !== undefined) usedData.push(s.data);
+    });
+    
+    // Find first unused memory
+    for (const mem of ALL_MEMORIES) {
+      if (!usedData.includes(mem)) {
+        return mem;
+      }
+    }
+    
+    // If all used, return first
+    return ALL_MEMORIES[0];
+  },
+
+  // ========== HANDLE READ (REMEMBER) - FIXED ==========
+  handleRead: (coreId, slotIndex) => {
+    console.log('=== handleRead called ===');
+    console.log('coreId:', coreId, 'slotIndex:', slotIndex);
+    
+    const state = get();
+    
+    // Validate slot
+    if (slotIndex === undefined || slotIndex === null || slotIndex < 0) {
+      state.setExplanation(
+        'Please select a memory slot first!',
+        'No slot selected.'
+      );
       return;
     }
 
-    // No one has it → Exclusive
-    set((state) => {
-      if (coreId === 0) {
-        state.core0.slots[slotIndex] = { address, data, state: 'e' };
-      } else {
-        state.core1.slots[slotIndex] = { address, data, state: 'e' };
+    const coreKey = coreId === 0 ? 'core0' : 'core1';
+    const core = state[coreKey];
+    const coreName = core.name;
+    
+    // Check if slot already has data
+    const currentSlot = core.slots[slotIndex];
+    console.log('Current slot:', currentSlot);
+    
+    if (currentSlot.data !== null && currentSlot.data !== undefined) {
+      state.setExplanation(
+        `"${currentSlot.data}" is already in ${coreName}'s Memory Pocket!`,
+        'Cache hit! No bus transaction needed.'
+      );
+      state.addLog(`${coreName} cache hit: "${currentSlot.data}"`);
+      state.triggerBus(
+        `BUS: ${coreName} READ "${currentSlot.data}" (Cache Hit)`,
+        'Data already in cache.'
+      );
+      return;
+    }
+
+    // ===== CACHE MISS - Load new data =====
+    const newData = state.getNextMemory();
+    console.log('Loading new data:', newData);
+    
+    // Create NEW slots array (don't mutate!)
+    const newSlots = [...core.slots];
+    newSlots[slotIndex] = {
+      address: `0x0${slotIndex + (coreId === 0 ? 0 : 3)}`,
+      data: newData,
+      state: 'e'  // Exclusive
+    };
+    
+    console.log('New slots:', newSlots);
+    
+    // UPDATE THE STORE - Return NEW state object
+    set({
+      [coreKey]: {
+        ...core,  // Spread existing core properties
+        slots: newSlots  // Replace slots with new array
       }
     });
-
-    const aliceText = `${coreName} remembered the ${data}! She is the only one with this memory.`;
-    const hardwareText = `${coreName} issued a PrRd (Bus Read). Data fetched from Main Memory. No other core has this data → Exclusive (E) state.`;
-    get().setExplanation(aliceText, hardwareText);
-    get().addLog(`${coreName} read ${data} → Exclusive (E)`);
-    get().triggerBus('Teacup', coreId === 0 ? 'right' : 'left');
+    
+    // Verify update
+    const updated = get();
+    console.log('Updated slots:', updated[coreKey].slots);
+    console.log('Updated slot data:', updated[coreKey].slots[slotIndex]);
+    
+    // Update explanation
+    state.setExplanation(
+      `${coreName} remembered the "${newData}" from the subconscious!`,
+      `Data fetched from Main Memory. No other core has this data → Exclusive (E) state.`
+    );
+    state.addLog(`${coreName} read "${newData}" from RAM → Exclusive (E)`);
+    state.triggerBus(
+      `BUS: ${coreName} READ "${newData}" from RAM`,
+      'No other core has this memory. State: Exclusive (E).'
+    );
   },
 
-  // ========== HANDLE WRITE (CORRUPT) ==========
+  // ========== HANDLE WRITE (CORRUPT) - FIXED ==========
   handleWrite: (coreId, slotIndex) => {
     const state = get();
-    const core = coreId === 0 ? state.core0 : state.core1;
-    const coreName = core.name;
-    const otherCoreId = coreId === 0 ? 1 : 0;
-    const otherCore = otherCoreId === 0 ? state.core0 : state.core1;
-    const otherCoreName = otherCore.name;
-    const address = '0x0F';
-    const newData = 'Bloody Grenade';
-
-    // Check if the slot is empty
-    if (state.core0.slots[slotIndex].state === 'empty' &&
-        state.core1.slots[slotIndex].state === 'empty') {
-      const aliceText = `There's no memory here to corrupt! Try "Remember" first.`;
-      const hardwareText = `Cannot write to an empty cache line. Perform a Read (PrRd) first.`;
-      get().setExplanation(aliceText, hardwareText);
+    
+    if (slotIndex === undefined || slotIndex === null || slotIndex < 0) {
+      state.setExplanation(
+        'Please select a memory slot first!',
+        'No slot selected.'
+      );
       return;
     }
 
-    // Invalidate other core's copy
-    const otherSlot = otherCore.slots.find((s) => s.address === address);
-    if (otherSlot && otherSlot.state !== 'empty' && otherSlot.state !== 'i') {
-      const otherIndex = otherCore.slots.indexOf(otherSlot);
-      set((state) => {
-        if (otherCoreId === 0) {
-          state.core0.slots[otherIndex] = { address: null, data: null, state: 'i' };
-        } else {
-          state.core1.slots[otherIndex] = { address: null, data: null, state: 'i' };
-        }
-      });
+    const coreKey = coreId === 0 ? 'core0' : 'core1';
+    const core = state[coreKey];
+    const coreName = core.name;
+    const otherCoreKey = coreId === 0 ? 'core1' : 'core0';
+    const otherCore = state[otherCoreKey];
+    const otherCoreName = otherCore.name;
+    
+    const corrupted = ['Bloody Grenade', 'Ruin', 'Void', 'Shattered Glass', 'Twisted Memory', 'Broken Mirror'];
+    const randomCorrupt = corrupted[Math.floor(Math.random() * corrupted.length)];
+
+    const currentSlot = core.slots[slotIndex];
+    if (currentSlot.state === 'empty' || currentSlot.address === null) {
+      state.setExplanation(
+        `There's no memory here to corrupt! Try "Remember" first.`,
+        `Cannot write to an empty cache line.`
+      );
+      return;
     }
 
-    // Set writer to Modified (M)
-    set((state) => {
-      if (coreId === 0) {
-        state.core0.slots[slotIndex] = { address, data: newData, state: 'm' };
-      } else {
-        state.core1.slots[slotIndex] = { address, data: newData, state: 'm' };
+    const address = currentSlot.address;
+    const dataToCorrupt = currentSlot.data;
+
+    // Invalidate other core if it has this data
+    let invalidatedOther = false;
+    const otherSlotIndex = otherCore.slots.findIndex(s => s.address === address);
+    
+    if (otherSlotIndex !== -1) {
+      const otherSlot = otherCore.slots[otherSlotIndex];
+      if (otherSlot.state !== 'empty' && otherSlot.state !== 'i') {
+        // Create NEW slots array for other core
+        const otherNewSlots = [...otherCore.slots];
+        otherNewSlots[otherSlotIndex] = { address: null, data: null, state: 'i' };
+        
+        // Update other core with NEW state
+        set({
+          [otherCoreKey]: {
+            ...otherCore,
+            slots: otherNewSlots
+          }
+        });
+        invalidatedOther = true;
+      }
+    }
+
+    // Set writer to Modified - Create NEW slots array
+    const newSlots = [...core.slots];
+    newSlots[slotIndex] = { address, data: randomCorrupt, state: 'm' };
+    
+    // Update current core with NEW state
+    set({
+      [coreKey]: {
+        ...core,
+        slots: newSlots
       }
     });
 
-    const aliceText = `${coreName} corrupted the memory! ${otherCoreName}'s memory shattered because it's now stale!`;
-    const hardwareText = `${coreName} issued a BusRdX (Read for Ownership). Broadcasted a write request on the Snooping Bus. ${otherCoreName} snooped this and transitioned to Invalid (I). ${coreName}'s line entered Modified (M). Only one core can hold M at a time!`;
-    get().setExplanation(aliceText, hardwareText);
-    get().addLog(`${coreName} corrupted memory → ${otherCoreName} Invalidated (I)`);
-    get().triggerBus('Blade', coreId === 0 ? 'right' : 'left');
+    state.setExplanation(
+      invalidatedOther
+        ? `${coreName} corrupted "${dataToCorrupt}" into "${randomCorrupt}"! ${otherCoreName}'s memory shattered!`
+        : `${coreName} corrupted "${dataToCorrupt}" into "${randomCorrupt}"!`,
+      invalidatedOther
+        ? `${otherCoreName} transitioned to Invalid (I). ${coreName}'s line entered Modified (M).`
+        : `Cache line entered Modified (M).`
+    );
+    state.addLog(`${coreName} corrupted "${dataToCorrupt}" → "${randomCorrupt}" (M)`);
+    state.triggerBus(
+      `BUS: ${coreName} MODIFIED "${dataToCorrupt}" → "${randomCorrupt}"`,
+      invalidatedOther ? `${otherCoreName}'s copy invalidated!` : 'No other core has this data.'
+    );
   },
 
-  // ========== HANDLE WRITEBACK (EMBRACE SANITY) ==========
+  // ========== HANDLE WRITEBACK - FIXED ==========
   handleWriteback: (coreId, slotIndex) => {
     const state = get();
-    const core = coreId === 0 ? state.core0 : state.core1;
+    
+    if (slotIndex === undefined || slotIndex === null || slotIndex < 0) {
+      state.setExplanation(
+        'Please select a memory slot first!',
+        'No slot selected.'
+      );
+      return;
+    }
+
+    const coreKey = coreId === 0 ? 'core0' : 'core1';
+    const core = state[coreKey];
     const coreName = core.name;
     const slot = core.slots[slotIndex];
 
-    if (slot.state === 'm') {
-      // Update main memory
-      set((state) => {
-        state.mainMemory.data = slot.data;
-      });
+    if (slot.state === 'empty' || slot.address === null) {
+      state.setExplanation(
+        `There's no memory here to save!`,
+        `Cannot writeback an empty cache line.`
+      );
+      return;
+    }
 
-      // Transition from Modified (M) to Exclusive (E)
-      set((state) => {
-        if (coreId === 0) {
-          state.core0.slots[slotIndex] = { ...state.core0.slots[slotIndex], state: 'e' };
-        } else {
-          state.core1.slots[slotIndex] = { ...state.core1.slots[slotIndex], state: 'e' };
+    if (slot.state === 'm') {
+      // Create NEW slots array
+      const newSlots = [...core.slots];
+      newSlots[slotIndex] = { ...newSlots[slotIndex], state: 's' };
+      
+      // Update core with NEW state
+      set({
+        [coreKey]: {
+          ...core,
+          slots: newSlots
         }
       });
 
-      const aliceText = `${coreName} embraced sanity and saved the corrupted memory to her brain. It's now permanent!`;
-      const hardwareText = `${coreName} issued a Writeback (WB). The Modified (M) data was written back to Main Memory (RAM). Cache line transitioned from M to Exclusive (E). Memory is now coherent.`;
-      get().setExplanation(aliceText, hardwareText);
-      get().addLog(`${coreName} Writeback to RAM → Exclusive (E)`);
-      get().triggerBus('Save', 'down');
+      state.setExplanation(
+        `${coreName} embraced sanity! "${slot.data}" is now purified.`,
+        `Writeback (WB) operation. Modified (M) data flushed to Main Memory. Cache line transitioned to Shared (S).`
+      );
+      state.addLog(`${coreName} Writeback to RAM → Shared (S)`);
+      state.triggerBus(
+        `BUS: ${coreName} WRITEBACK "${slot.data}" to RAM`,
+        'Memory purified! RAM updated.'
+      );
     } else {
-      const aliceText = `There's nothing corrupted to save! Only Modified (M) memories can be saved.`;
-      const hardwareText = `Writeback (WB) is only valid for Modified (M) cache lines. Current state: ${slot.state.toUpperCase()}`;
-      get().setExplanation(aliceText, hardwareText);
+      state.setExplanation(
+        `"${slot.data}" isn't corrupted! Only Modified memories need to be purified.`,
+        `Current state: ${slot.state.toUpperCase()}. Writeback only valid for Modified (M).`
+      );
     }
+  },
+
+  // ========== RESET - FIXED ==========
+  resetAll: () => {
+    set({
+      core0: {
+        name: 'Classic Alice',
+        slots: createEmptySlots(),
+      },
+      core1: {
+        name: 'Hysteria Alice',
+        slots: createEmptySlots(),
+      },
+      selectedSlot: { core: 0, index: 0 },
+      isBusActive: false,
+      busItem: null,
+      busDirection: null,
+      busMessage: {
+        text: 'Bus idle... Waiting for action',
+        sub: 'Snooping for memory operations',
+        type: 'idle'
+      },
+      explanation: {
+        alice: 'All slots reset. Click a slot, then "Remember" to load a memory.',
+        hardware: 'All cache lines are Invalid (I).',
+      },
+      log: ['System reset. All cache lines empty.'],
+    });
   },
 }));
