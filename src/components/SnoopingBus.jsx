@@ -3,20 +3,24 @@ import React from 'react';
 import { useCacheStore } from '../store/cacheStore';
 
 const SnoopingBus = () => {
-  const { isBusActive, busItem, busDirection } = useCacheStore();
+  const { busMessage, isBusActive } = useCacheStore();
+  
+  // SAFETY: Use defaults if busMessage is undefined
+  const safeBusMessage = busMessage || { text: 'Bus idle...', sub: 'Waiting for action', type: 'idle' };
 
   return (
     <div className="snooping-bus">
       <h4>Looking-Glass Bus</h4>
       <div className={`bus-icon ${isBusActive ? 'active' : ''}`}>
-        {isBusActive ? (busItem || '---') : '...'}
+        {isBusActive ? '' : ''}
       </div>
-      <div className="bus-idle-text">
-        {isBusActive
-          ? busDirection === 'down'
-            ? 'Writing to RAM...'
-            : 'Broadcasting...'
-          : 'The mirror is quiet...'}
+      <div className="bus-message">
+        <div className="message-text">{safeBusMessage.text || 'Bus idle...'}</div>
+        <div className="message-sub">{safeBusMessage.sub || 'Waiting for action'}</div>
+      </div>
+      <div className="bus-status">
+        <span className={`status-dot ${isBusActive ? 'active' : 'idle'}`} />
+        <span>{isBusActive ? 'Bus Active' : 'Idle'}</span>
       </div>
     </div>
   );
