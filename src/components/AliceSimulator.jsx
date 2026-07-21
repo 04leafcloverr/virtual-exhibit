@@ -26,15 +26,17 @@ const AliceSimulator = () => {
         {/* Classic Alice (Core 0) */}
         <div className="classic-alice">
           <h3>Classic Alice (Core 0)</h3>
-          {core0.slots.map((slot, index) => (
-            <ClassicAliceSlot
-              key={index}
-              slot={slot}
-              index={index}
-              isSelected={selectedSlot.core === 0 && selectedSlot.index === index}
-              onSelect={() => selectSlot(0, index)}
-            />
-          ))}
+          <div className="memory-slots">
+            {core0.slots.map((slot, index) => (
+              <ClassicAliceSlot
+                key={index}
+                slot={slot}
+                index={index}
+                isSelected={selectedSlot.core === 0 && selectedSlot.index === index}
+                onSelect={() => selectSlot(0, index)}
+              />
+            ))}
+          </div>
           <div className="button-group">
             <button
               className="btn-remember"
@@ -66,15 +68,17 @@ const AliceSimulator = () => {
         {/* Hysteria Alice (Core 1) */}
         <div className="hysteria-alice">
           <h3>Hysteria Alice (Core 1)</h3>
-          {core1.slots.map((slot, index) => (
-            <HysteriaAliceSlot
-              key={index}
-              slot={slot}
-              index={index}
-              isSelected={selectedSlot.core === 1 && selectedSlot.index === index}
-              onSelect={() => selectSlot(1, index)}
-            />
-          ))}
+          <div className="memory-slots">
+            {core1.slots.map((slot, index) => (
+              <HysteriaAliceSlot
+                key={index}
+                slot={slot}
+                index={index}
+                isSelected={selectedSlot.core === 1 && selectedSlot.index === index}
+                onSelect={() => selectSlot(1, index)}
+              />
+            ))}
+          </div>
           <div className="button-group">
             <button
               className="btn-remember"
