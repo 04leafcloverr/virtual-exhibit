@@ -4,13 +4,23 @@ import { useCacheStore } from '../store/cacheStore';
 
 const ExplanationPanel = () => {
   const { explanation } = useCacheStore();
+  
+  // SAFETY: Use defaults if explanation is undefined
+  const safeExplanation = explanation || { 
+    alice: 'Click a slot, then "Remember" to load a memory.',
+    hardware: 'All cache lines are Invalid (I).'
+  };
 
   return (
     <div className="explanation-panel">
       <h4>What Just Happened?</h4>
       <div className="explanation-content">
-        <p><strong>Alice says:</strong> {explanation.alice}</p>
-        <p><strong>In Hardware:</strong> {explanation.hardware}</p>
+        <div className="explanation-alice">
+          <p><strong>Alice says:</strong> {safeExplanation.alice || 'No explanation available.'}</p>
+        </div>
+        <div className="explanation-hardware">
+          <p><strong>In Hardware:</strong> {safeExplanation.hardware || 'No hardware explanation available.'}</p>
+        </div>
       </div>
     </div>
   );
