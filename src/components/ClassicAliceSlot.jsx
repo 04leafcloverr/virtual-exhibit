@@ -16,11 +16,11 @@ const ClassicAliceSlot = ({ slot, index, isSelected, onSelect }) => {
 
   // SAFE: Check state exists
   const stateClass = (safeSlot.state === 'empty' || safeSlot.state === null || safeSlot.state === undefined)
-    ? 'state-e'
+    ? 'state-empty'
     : `state-${safeSlot.state}`;
 
   const stateLabel = (safeSlot.state === 'empty' || safeSlot.state === null || safeSlot.state === undefined)
-    ? 'E'
+    ? 'EMPTY'
     : safeSlot.state.toUpperCase();
 
   return (
