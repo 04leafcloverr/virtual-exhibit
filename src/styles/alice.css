@@ -33,6 +33,12 @@ body {
   gap: 10px;
 }
 
+/* ========== TABLE STYLING ========== */
+table {
+    border-collapse: separate;
+    border-spacing: 16px 4px; /* horizontal vertical */
+}
+
 /* ========== CLASSIC ALICE (CORE 0) ========== */
 .classic-alice {
   background-color: #1a2a4a;
@@ -125,6 +131,8 @@ body {
   background-color: #1a1a2a;
   color: #444;
 }
+
+
 
 /* ========== SNOOPING BUS (MIRROR) ========== */
 .snooping-bus {
