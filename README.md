@@ -1,19 +1,41 @@
 # CSARCH2 GROUP 1 S40 INCREMENTAL README
+This README serves as the incremental development log for our exhibit, Alice Through the Snooping Bus: A Wonderland of Cache Coherence. It documents our original proposal alongside the technical discussions, creative discussions, aha moments, and challenges encountered as development progressed.
+
+## Table of Contents
+- Aha Moments(#aha-moments)
+- Things Learned(#things-learned)
+- Challenges Encountered(#challenges-encountered)
+- Creative Development(#creative-development)
+- Technical Discussions(#technical-discussions)
+- Original Project Proposal(#original-project-proposal)
 
 ## Mid-Milestone Development
 
 ### Aha Moments
-- 
+- Realizing that every state transition is crucial to be in the right order and ensuring that both cores know the accurate information.
+- Discovered that keeping the "Memory Pocket" to only 3 slots per core made the exhibit clearer, as fewer states meant users could actually track a Read/Write/Writeback sequence.
+- Found innovative approaches/workarounds on the Astro template codes and integrated the project's theme smoothly in the process.
 
 ### Things Learned
 - Basic Astro project structure.
+- How React component state can be used to represent the cache line states (M/E/S/I) and re-render the "Memory Pocket" slots whenever a Read, Write, or Writeback event fires.
+- How .mdx files let React components be dropped directly into written content, so the exhibit's narrative and its interactive simulator can live in the same file instead of being wired together separately.
 
-### Challenges
+### Challenges Encountered
 - Learning Astro while simultaneously planning the exhibit.
 - Translating a complex computer architecture topic into an educational exhibit.
+- Occurrences when the website layout struggled with issues of unresponsiveness.
 
 ### Creative Development
 - Refined the original idea by representing CPU cores as Classic Alice and Hysteria Alice, making the cache coherence process easier to visualize.
+- Created the 'Rabbit Hole' Writeback Mechanic to demonstrate the cache coherence topic.
+- The discussion of different visuals, images from the Alice Game to be integrated into the website aesthetic and tone.
+
+
+### Technical Discussions about the topic (Cache Coherence)
+- How we fit the MESI protocol states to a 3-Slot Cache Memory Pocket.
+- Analysis of how cache snoop broadcasts are simulated between each component.
+- Discussion of how the cache's logic will work on code based on the MESI protocol (Remember button (Exclusive), Corrupt button (Modify), Embrace Sanity button (Shared), and Invalid).
 
 ---
 
