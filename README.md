@@ -2,12 +2,12 @@
 This README serves as the incremental development log for our exhibit, Alice Through the Snooping Bus: A Wonderland of Cache Coherence. It documents our original proposal alongside the technical discussions, creative discussions, aha moments, and challenges encountered as development progressed.
 
 ## Table of Contents
-- Aha Moments(#aha-moments)
-- Things Learned(#things-learned)
-- Challenges Encountered(#challenges-encountered)
-- Creative Development(#creative-development)
-- Technical Discussions(#technical-discussions)
-- Original Project Proposal(#original-project-proposal)
+- [Aha Moments](#aha-moments)
+- [Things Learned](#things-learned)
+- [Challenges Encountered](#challenges-encountered)
+- [Creative Development](#creative-development)
+- [Technical Discussions](#technical-discussions)
+- [Original Project Proposal](#original-project-proposal)
 
 ## Mid-Milestone Development
 
