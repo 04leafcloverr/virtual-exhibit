@@ -1,0 +1,3 @@
+---
+layout: ../layouts/HomepageLayout.astro
+---
