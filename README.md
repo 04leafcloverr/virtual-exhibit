@@ -13,7 +13,7 @@ This README serves as the incremental development log for our exhibit, Alice Thr
 
 ### Aha Moments
 - Realizing that every state transition is crucial to be in the right order and ensuring that both cores know the accurate information.
-- Discovered that keeping the "Memory Pocket" to only 3 slots per core made the exhibit clearer, as fewer states meant users could actually track a Read/Write/Writeback sequence.
+- Discovered that keeping the "Memory Pocket" to only 1 slot per core made the exhibit clearer, as fewer slots meant users could actually track a Read/Write/Writeback sequence.
 - Found innovative approaches/workarounds on the Astro template codes and integrated the project's theme smoothly in the process.
 
 ### Things Learned
@@ -27,13 +27,17 @@ This README serves as the incremental development log for our exhibit, Alice Thr
 - Occurrences when the website layout struggled with issues of unresponsiveness.
 
 ### Creative Development
-- Refined the original idea by representing CPU cores as Classic Alice and Hysteria Alice, making the cache coherence process easier to visualize.
-- Created the 'Rabbit Hole' Writeback Mechanic to demonstrate the cache coherence topic.
+- Refined the original idea by representing CPU cores as Classic Alice and Hysteria Alice, making the cache coherence process easier to visualize. This Alice-in-Wonderland metaphor makes the MESI protocol accessible by mapping hardware states to emotional and psychological states—pure memories become Exclusive, shared recollections become Shared, corrupted memories become Modified, and shattered memories become Invalid.
+- Created the 'Rabbit Hole' Writeback Mechanic to demonstrate the cache coherence topic by representing Alice's brain (RAM) as the "subconscious" where memories are permanently stored. When one personality corrupts a memory, it exists only in her conscious mind (cache) while the subconscious or other personality remains unchanged. Similar to how Modified (M) data stays in cache while RAM remains stale. This makes it easier to understand how one personality breaking/modifying a memory can cause confusion and invalidation similar to how MESI states work.
+- Designed the Looking-Glass as a Snooping Bus Protocol metaphor, the broadcast medium that connects all cores. When a core performs a memory operation, the bus "reflects" that action to all other cores. This real-time visualization helps users grasp how snooping enables cache coherence without requiring deep hardware knowledge.
 - The discussion of different visuals, images from the Alice Game to be integrated into the website aesthetic and tone.
+- Changed the colors of the MESI states to better fit the color palette of the game.
+- Removed images such as Classic Alice, Hysteria Alice, and the Purple Vortex for a cleaner design
 
 
 ### Technical Discussions about the topic (Cache Coherence)
-- How we fit the MESI protocol states to a 3-Slot Cache Memory Pocket.
+- In our initial design, each CPU core had a 3-slot "Memory Pocket" (cache) to represent multiple cache lines. However, we found that this created unnecessary complexity for users trying to understand the core MESI concepts. By simplifying to 1 slot per core, we achieve clearer state transitions, focused learning, and easier visualization. 
+- Meanwhile, we kept 5 slots in RAM to provide enough variety of memories for users to experiment with different data items.
 - Analysis of how cache snoop broadcasts are simulated between each component.
 - Discussion of how the cache's logic will work on code based on the MESI protocol (Remember button (Exclusive), Corrupt button (Modify), Embrace Sanity button (Shared), and Invalid).
 
@@ -64,8 +68,8 @@ Pallarca, Cedric S. <br>
 **Styling:** TailwindCSS or standard CSS styles all UI components with utility classes.<br>
 
 ## Proposed Interactive Element:
-We will build a React component that visualizes two CPU cores sharing a single block of data in order to demonstrate how the snooping bus keeps the caches synchronized. We can achieve this by setting Alice’s two personalities (Classic Alice and Hysteria Alice) as our CPU cores while her brain becomes the shared RAM. <br><br> Features include:
-Dual personality hotbar. The screen is split between Classic Alice (Core 0, wearing her signature blue dress) and Hysteria Alice (Core 1, dressed in white with red gloves). Each personality has a 3-slot "Memory Pocket" (cache lines). Slots display items and are colored according to MESI state: Red (Modified/Corrupted), Blue (Exclusive/Pure), Green (Shared/Remembered), or Grey (Invalid/Suppressed). <br><br>
+We will build a React component that visualizes two CPU cores sharing a single block of data in order to demonstrate how the snooping bus keeps the caches synchronized. We can achieve this by setting Alice’s two personalities (Classic Alice and Hysteria Alice) as our CPU cores while her brain becomes the shared RAM which we called the Rabbit Hole which also encapsulates her switching between personalities. <br><br> Features include:
+Dual personality hotbar. The screen is split between Classic Alice and Hysteria Alice. Each personality has a 3-slot "Memory Pocket" (cache lines). Slots display items and are colored according to MESI state: Red (Modified/Corrupted), Blue (Exclusive/Pure), Green (Shared/Remembered), or Grey (Invalid/Suppressed). <br><br>
 Read (remember) and Write (corrupt) buttons. Remember can recall a memory from the subconscious, while Corrupt can overwrite/modify it. Performing a Corrupt on Hysteria Alice’s side forces a snoop on Classic Alice’s side.<br><br>
 The Rabbit Hole Button. A vertical spiraling vortex at the bottom represents Alice's Brain (RAM). When Hysteria Alice corrupts a memory, the conscious mind (cache) is updated, but the deep subconscious remains stale until the user clicks “Embrace Sanity” (Writeback). This sends a purified memory spiraling down to stabilize the core identity.<br>
 
