@@ -79,3 +79,6 @@ The layout will use CSS Flexbox/Grid to ensure the exhibit scales down cleanly. 
 ## Style Guide Snapshot:
 <img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/5e25059c-982a-4403-99e6-be77a02c87b2" />
 <img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/8a3864aa-57af-40dd-bf09-6dfbfc97770c" />
+
+## Declaration of AI Usage:
+AI was used to clarify and deepend our understanding of Cache Coherence Snooping Bus Protocol based on the references we found. It was also used to help with fixing some responsiveness issues in the css.
