@@ -48,7 +48,7 @@ This README serves as the incremental development log for our exhibit, Alice Thr
 ---
 
 ## Title of Project: 
-#Alice Through the Snooping Bus: A Wonderland of Cache Coherence
+# Alice Through the Snooping Bus: A Wonderland of Cache Coherence
 
 ## Project Theme:
 Cache Coherence (MESI Protocol). Our exhibit will explore how multi-core processors communicate to maintain data consistency, using American McGee’s Alice and Alice: Madness Returns video games as a guiding metaphor. <br><br> The core mechanism we wish to explain is the Snooping Bus, which is a broadcast medium where cores announce their memory operations for all processors to observe. In our exhibit, the two “cores” are Classic Alice and Hysteria Alice—two personalities inhabiting the same mind (shared Main Memory). <br><br> When Hysteria Alice corrupts a memory (Write), she broadcasts this corruption across the looking-glass snooping bus. <br> Classic Alice snoops this broadcast and is forced to instantly invalidate her old, happy memory to prevent cognitive dissonance. <br><br>With this simulation, users take on the roles of both personalities, selecting Remember (Read) and Corrupt (Write) commands, and sending shattered memories across the looking-glass snooping bus, triggering real-time MESI state transitions that demonstrate the cost and necessity of cache coherence.
