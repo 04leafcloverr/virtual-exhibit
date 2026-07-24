@@ -1,13 +1,60 @@
-/* ========== BIG CONTAINER ========== */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+/* ========== HEADER ========== */
+:root {
+    --bg1: #1a1a2e !important;      
+    --bg2: #1d1d1d !important;  
+    --text: #f8f4e3 !important;     
+    --muted: #f8f4e3 !important;   
+    --border: #e6d1a3 !important;  
+    --accent: #e6d1a3 !important;  
+}
+
+/* ========== GEOMETRIC PATTERN ========== */
+html {
+  --s: 200px; /* control the size*/
+  --c1: #2c2c2c !important;
+  --c2: #3d3d3d !important;
+  --c3: #4a4a4a !important;
+
+  background:
+      repeating-conic-gradient(from 30deg, #0000 0 120deg, var(--c3) 0 50%)
+          calc(var(--s) / 2) calc(var(--s) * tan(30deg) / 2),
+      repeating-conic-gradient(
+          from 30deg,
+          var(--c1) 0 60deg,
+          var(--c2) 0 120deg,
+          var(--c3) 0 50%
+      );
+  background-size: var(--s) calc(var(--s) * tan(30deg));
+}
+
+/* ========== CONTAINER SHADOW ========== */
 body {
-  color: #507DBC;
-  font-family: 'Georgia', serif;
+  color: #f8f4e3;
+  font-family: 'Times New Roman', Times, serif !important;
+}
+.title,
+.subtitle {
+  font-family: 'Cinzel Decorative', serif !important;
+}
+.content__titlemeta h1 {
+  font-family: 'Cinzel Decorative', serif !important;
+}
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+  font-family: 'Cinzel Decorative', serif !important;
+}
+.toc h2 {
+  font-family: 'Cinzel Decorative', serif !important;
 }
 
 /* ========== ALICE CONTAINER ========== */
 .exhibit-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -15,42 +62,43 @@ body {
 .exhibit-title {
   text-align: center;
   font-size: 2.5rem;
-  color: #36914b;
-  border-bottom: 2px solid #5033b8;
   padding-bottom: 10px;
   margin-bottom: 20px;
 }
-
 .exhibit-subtitle {
   text-align: center;
-  color: #c4a0e8;
   font-size: 1.2rem;
   margin-bottom: 30px;
 }
 
 /* ========== SPLIT SCREEN LAYOUT ========== */
-.split-container {
-  gap: 10px;
-}
-
-/* ========== TABLE STYLING ========== */
-table {
-    border-collapse: separate;
-    border-spacing: 16px 4px; /* horizontal vertical */
+.split-container{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+      "classic hysteria"
+      "bus bus";
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* ========== CLASSIC ALICE (CORE 0) ========== */
 .classic-alice {
-  background-color: #1a2a4a;
-  border: 2px solid #4a90d9;
+  background-color: #13133f;
+  border: 2px solid #1780d1;
   border-radius: 10px;
+  height: 150px;
 }
-
 .classic-alice h3 {
-  color: #4fc3f7;
+  color: #1780d1;
   text-align: center;
   font-size: 1.2rem;
   margin-top: 8px;
+  margin-bottom: 1px;
+  font-family: 'Times New Roman', Times, serif !important;
+  border-bottom: none !important;
 }
 
 /* ========== HYSTERIA ALICE (CORE 1) ========== */
@@ -58,39 +106,30 @@ table {
   background-color: #4a1a1a;
   border: 2px solid #e94560;
   border-radius: 10px;
+  height: 150px;
 }
-
 .hysteria-alice h3 {
   color: #e94560;
   text-align: center;
   font-size: 1.2rem;
   margin-top: 8px;
+  margin-bottom: 1px;
+  font-family: 'Times New Roman', Times, serif !important;
+  border-bottom: none !important;
 }
 
 /* ========== MEMORY SLOTS ========== */
-.memory-slots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 15px;
-}
-
 .memory-slot {
-  aspect-ratio: 1 / 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
+  width: 70px;
+  height: 70px;
+  left: 30px;
+  top: 15px;
   border-radius: 10px;
-  text-align: center;
-  font-size: 0.9rem;
-  font-weight: bold;
   transition: all 0.3s ease;
   cursor: pointer;
-  min-height: 50px;
-  word-break: break-word;
-  position: relative;
+  position: absolute;
+  border: 2px solid transparent;
+  overflow: hidden;
 }
 
 .memory-slot:hover {
@@ -99,125 +138,70 @@ table {
 }
 
 .memory-slot.selected {
-  border: 2px solid white !important;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
   transform: scale(1.05);
   z-index: 2;
 }
 
-/* ========== MESI STATES ========== */
-.state-e {
-  background-color: #3788ac;
-  color: #4fc3f7;
-}
-
-.state-s {
-  background-color: #1a3a1a;
-  color: #66bb6a;
-}
-
-.state-m {
-  background-color: #4a1a1a;
-  color: #e94560;
-}
-
-.state-i {
-  background-color: #2a2a2a;
-  color: #616161;
-  opacity: 0.5;
-}
-
-.state-empty {
-  background-color: #1a1a2a;
-  color: #444;
-}
-
-
-
-/* ========== SNOOPING BUS (MIRROR) ========== */
-.snooping-bus {
-  background-color: #1a1a2e;
-  color: white;
-  border: 2px solid #888;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
+/* ---------- SLOT CONTENT - IMAGE ONLY ---------- */
+.slot-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  min-height:50px;
-  font-family: 'Georgia'
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
-.snooping-bus h4 {
-  color: #aaa;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-
-.bus-icon {
-  font-size: 2.5rem;
-  margin: 5px 0;
-  transition: all 0.3s ease;
-}
-
-.bus-icon.active {
-  animation: slideBus 0.8s ease-in-out;
-}
-
-@keyframes slideBus {
-  0% { transform: translateX(-30px); opacity: 0; }
-  50% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(30px); opacity: 0; }
-}
-
-.bus-idle-text {
-  font-size: 0.7rem;
-  color: #555;
-}
-
-/* ========== RAM (MAIN MEMORY) ========== */
-.ram-container {
-  background-color: #0d0d1a;
-  border: 2px solid #9b59b6;
+.slot-content .memory-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
   border-radius: 10px;
-  padding: 15px;
-  margin: 15px 0;
-  text-align: center;
 }
 
-.ram-container h3 {
-  color: #c4a0e8;
-  margin-bottom: 10px;
-  font-size: 1rem;
+/* Hide text labels completely */
+.slot-content .memory-label,
+.slot-content .slot-data,
+.slot-content .slot-address {
+  display: none !important;
 }
 
-.ram-data {
-  font-size: 1.5rem;
-  color: white;
-}
-
-.ram-address {
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 5px;
+.slot-empty-text {
+  font-size: 1.2rem;
+  color: #444;
+  font-weight: bold;
 }
 
 /* ========== BUTTONS ========== */
+.slot-row {
+    position: relative;
+    width: 100%;
+    height: 150px;
+}
+
+/* Vertical button layout */
 .button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin: 10px 0;
-  justify-content: center;
+    position: absolute;
+    left: 125px;     /* distance from left edge */
+    top: 23px;       /* distance from top */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.button-group button {
+  margin-left: 1px;  
+  width: 125px;
+    padding: 5px;
+    font-size: 0.85rem;
 }
 
 button {
   background-color: #4a4a6a;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding-right: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 0.8rem;
@@ -239,30 +223,32 @@ button:disabled {
 }
 
 .btn-remember {
-  background-color: #4fc3f7;
-  color: #1a1a2e;
+  background-color: #1d1d1d;
+  border: 0.5px solid #e6d1a3;
+  color: #e6d1a3;
 }
 
 .btn-remember:hover:not(:disabled) {
-  background-color: #81d4fa;
+  background-color: #1d1d1d;
 }
 
 .btn-corrupt {
-  background-color: #e94560;
-  color: white;
+  background-color: #1d1d1d;
+  border: 0.5px solid #9b59b6;
+  color: #9b59b6;
 }
 
 .btn-corrupt:hover:not(:disabled) {
-  background-color: #ff6b81;
+  background-color: #1d1d1d;
 }
 
 .btn-writeback {
-  background-color: #66bb6a;
+  background-color: #9b59b6;
   color: #1a1a2e;
 }
 
 .btn-writeback:hover:not(:disabled) {
-  background-color: #81c784;
+  background-color: #a365bc;
 }
 
 /* ========== MESI LEGEND ========== */
@@ -296,10 +282,295 @@ button:disabled {
 .color-box.s { background-color: #66bb6a; }
 .color-box.i { background-color: #616161; }
 
+/* ========== MESI STATES ========== */
+.state-e {
+  background-color: rgba(248, 244, 227, 0.08);
+  border: 2px solid #f8f4e3;
+  box-shadow: 0 0 15px rgba(248, 244, 227, 0.18);
+}
+
+.state-s {
+  background-color: rgba(230, 209, 163, 0.10);
+  border: 2px solid #d5b777;
+  box-shadow: 0 0 15px rgba(230, 209, 163, 0.20);
+}
+
+.state-m {
+  background-color: rgba(155, 89, 182, 0.12);
+  border: 2px solid #9b59b6;
+  box-shadow: 0 0 18px rgba(155, 89, 182, 0.30);
+}
+
+.state-i {
+  background-color: rgba(29, 29, 29, 0.60);
+  border: 2px solid #5c5c5c;
+  opacity: 0.55;
+  filter: grayscale(100%);
+}
+
+.state-empty {
+  background-color: #1d1d1d;
+  border: 2px solid #2a2a3a;
+  opacity: 0.6;
+}
+
+/* ========== SNOOPING BUS (MIRROR) ========== */
+.snooping-bus {
+  background: #1d1d1d;
+  border: 1px solid #e6d1a3;
+  border-radius: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- HEADER ---------- */
+.snooping-bus h4 {
+  font-family: 'Times New Roman', Times, serif !important;
+  color: #f8f4e3;
+  font-size: 0.9rem;
+  text-align: left;
+  border-bottom: none !important;
+}
+
+/* ---------- STATUS INDICATOR ---------- */
+.bus-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6rem;
+  color: #888;
+}
+
+.bus-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #555;
+  transition: background-color 0.3s ease;
+}
+
+.bus-status-dot.active {
+  background-color: #4fc3f7;
+}
+
+/* ---------- MAIN CONTENT - FLEX ROW ---------- */
+.bus-content {
+  display: flex;
+  flex: 1;
+  gap: 15px;
+  min-height: 50px;
+  align-items: stretch;
+}
+
+/* ---------- LEFT: MIRROR (30%) ---------- */
+.bus-mirror-container {
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.bus-layout {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.bus-mirror {
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  color: #666;
+  letter-spacing: 2px;
+  font-family: 'Times New Roman', Times, serif !important;
+}
+
+.bus-mirror.active {
+  color: #4fc3f7;
+}
+
+.bus-mirror img {
+  width: 100px;
+  height: 120px;
+  object-fit: contain;
+}
+
+/* ---------- RIGHT: MESSAGE AREA (70%) ---------- */
+.bus-message-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  min-height: 80px;
+}
+
+.bus-message-text {
+  color: #e0e0e0;
+  font-family: 'Times New Roman', Times, serif !important;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.4;
+  font-weight: bold;
+}
+
+.bus-message-sub {
+  color: #888;
+  font-family: 'Times New Roman', Times, serif !important;
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ---------- HIDE LEGACY ELEMENTS ---------- */
+.bus-icon {
+  display: none;
+}
+
+.bus-idle-text {
+  display: none;
+}
+
+
+@media (max-width: 480px) {
+  .snooping-bus {
+    min-height: 140px;
+    padding: 10px;
+  }
+
+  .bus-mirror {
+    font-size: 0.9rem;
+  }
+
+  .bus-mirror img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .bus-message-text {
+    font-size: 0.7rem;
+  }
+}
+
+/* ========== RAM (MAIN MEMORY) ========== */
+.ram-container {
+  background-color: #0d0d1a;
+  border: 2px solid #9b59b6;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.ram-container h3 {
+  border-bottom: none !important;
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #c4a0e8;
+  font-size: 1rem;
+  font-family: 'Times New Roman', Times, serif !important;
+}
+
+/* ========== RAM SLOTS - 5 COLUMNS, 1 ROW ========== */
+.ram-slots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.ram-slot {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1.5px solid #4a4a6a;
+  border-radius: 8px;
+  padding: 5px;
+  text-align: center;
+  width: 90px;         
+  height:90px;          
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.ram-slot:hover {
+  border-color: #9b59b6;
+}
+
+.ram-slot .ram-address {
+  font-size: 0.6rem;
+  color: #666;
+}
+
+.ram-slot .ram-data {
+  font-size: 0.85rem;
+  color: #c4a0e8;
+  font-weight: bold;
+}
+
+/* ========== RESPONSIVE - TABLET ========== */
+@media (max-width: 992px) {
+  .ram-slots {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ========== RESPONSIVE - MOBILE ========== */
+@media (max-width: 768px) {
+  .ram-slots {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .ram-slot {
+    min-height: 50px;
+    padding: 8px;
+  }
+
+  .ram-slot .ram-data {
+    font-size: 0.75rem;
+  }
+}
+
+/* ========== RESPONSIVE - SMALL MOBILE ========== */
+@media (max-width: 480px) {
+  .ram-slots {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .ram-slot {
+    min-height: 45px;
+    padding: 6px;
+  }
+
+  .ram-slot .ram-data {
+    font-size: 0.7rem;
+  }
+
+  .ram-slot .ram-address {
+    font-size: 0.5rem;
+  }
+}
+
 /* ========== EXPLANATION PANEL ========== */
 .explanation-panel {
-  background-color: #1a1a2e;
-  border: 2px solid #4a2a5e;
+  background-color: #0d0d1a;
+  border: 2px solid #9b59b6;
   border-radius: 10px;
   padding: 15px;
   margin: 15px 0;
@@ -308,9 +579,12 @@ button:disabled {
 }
 
 .explanation-panel h4 {
+  margin-top: 10px;
+  margin-bottom: 0px;
   color: #c4a0e8;
   font-size: 0.9rem;
-  margin-bottom: 8px;
+  font-family: 'Times New Roman', Times, serif !important;
+  border-bottom: 1.5px solid #9b59b6;
 }
 
 .explanation-content {
@@ -325,7 +599,6 @@ button:disabled {
   border: 1px solid #333;
   border-radius: 5px;
   padding: 10px;
-  margin: 10px 0;
   max-height: 120px;
   overflow-y: auto;
   font-family: 'Courier New', monospace;
@@ -333,6 +606,7 @@ button:disabled {
 }
 
 .log-container h4 {
+  margin-top: 5px;
   color: #666;
   margin-bottom: 5px;
   font-size: 0.8rem;
@@ -405,4 +679,108 @@ button:disabled {
   .explanation-content {
     font-size: 0.85rem;
   }
+}
+
+/* ========== SELECTED RAM SLOT ========== */
+.ram-slot.selected {
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+/* ========== MESI STATE COLOR CODING ========== */
+.state-m {
+  background-color: rgba(155, 89, 182, 0.12);
+  border: 2px solid #9b59b6;
+  box-shadow: 0 0 18px rgba(155, 89, 182, 0.30);
+}
+
+.state-e {
+  background-color: rgba(248, 244, 227, 0.08);
+  border: 2px solid #f8f4e3;
+  box-shadow: 0 0 15px rgba(248, 244, 227, 0.18);
+}
+
+.state-s {
+  background-color: rgba(230, 209, 163, 0.10);
+  border: 2px solid #d5b777;
+  box-shadow: 0 0 15px rgba(230, 209, 163, 0.20);
+}
+
+.state-i {
+  border-color: #888888 !important; /* Grey for Invalid */
+  background-color: rgba(136, 136, 136, 0.15) !important;
+  box-shadow: 0 0 10px rgba(136, 136, 136, 0.2);
+  color: #888888 !important; /* Forces text to Grey */
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+/* ========== IMAGE STYLING ========== */
+.slot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 10px;
+}
+
+.memory-image {
+  max-width: 70px;
+  max-height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.memory-label {
+  font-weight: bold;
+  text-align: center;
+}
+
+.ram-image {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* ========== SNOOPING BUS LAYOUT ========== */
+.bus-mirror {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mirror-image {
+  width: 100px;
+  height: 200px;
+}
+
+.bus-summary {
+    flex: 7;
+      margin: 0;
+  padding: 0;
+}
+
+.bus-summary h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #f4e6c2;
+}
+
+.bus-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.bus-subtext {
+    margin: 0;
+    line-height: 1.5;
+    color: #d0d0d0;
 }

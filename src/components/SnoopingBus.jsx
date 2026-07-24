@@ -3,24 +3,33 @@ import React from 'react';
 import { useCacheStore } from '../store/cacheStore';
 
 const SnoopingBus = () => {
-  const { busMessage, isBusActive } = useCacheStore();
-  
-  // SAFETY: Use defaults if busMessage is undefined
-  const safeBusMessage = busMessage || { text: 'Bus idle...', sub: 'Waiting for action', type: 'idle' };
+  const { isBusActive, busMessage } = useCacheStore();
 
   return (
-    <div className="snooping-bus">
-      <h4>Looking-Glass Bus</h4>
-      <div className={`bus-icon ${isBusActive ? 'active' : ''}`}>
-        {isBusActive ? '' : ''}
-      </div>
-      <div className="bus-message">
-        <div className="message-text">{safeBusMessage.text || 'Bus idle...'}</div>
-        <div className="message-sub">{safeBusMessage.sub || 'Waiting for action'}</div>
-      </div>
-      <div className="bus-status">
-        <span className={`status-dot ${isBusActive ? 'active' : 'idle'}`} />
-        <span>{isBusActive ? 'Bus Active' : 'Idle'}</span>
+    <div className={`snooping-bus ${isBusActive ? 'active' : ''} ${busMessage.type}`}>
+      <div className="bus-layout">
+
+        {/* LEFT - Broken Mirror */}
+        <div className="bus-mirror">
+          <img
+            src="/virtual-exhibit-template/Broken-Mirror.png"
+            alt="Broken Mirror"
+            className="mirror-image"
+          />
+        </div>
+
+        {/* RIGHT - Action Summary */}
+        <div className="bus-summary">
+          <h4>Action Summary</h4>
+
+          <div className="bus-status">
+            <span className="status-indicator"></span>
+            <strong>{busMessage.text}</strong>
+          </div>
+
+          <p className="bus-subtext">{busMessage.sub}</p>
+        </div>
+
       </div>
     </div>
   );
