@@ -32,7 +32,7 @@ This README serves as the incremental development log for our exhibit, Alice Thr
 - Designed the Looking-Glass as a Snooping Bus Protocol metaphor, the broadcast medium that connects all cores. When a core performs a memory operation, the bus "reflects" that action to all other cores. This real-time visualization helps users grasp how snooping enables cache coherence without requiring deep hardware knowledge.
 - The discussion of different visuals, images from the Alice Game to be integrated into the website aesthetic and tone.
 - Changed the colors of the MESI states to better fit the color palette of the game.
-- Removed images such as Classic Alice, Hysteria Alice, and the Purple Vortex for a cleaner design
+- Removed images such as Classic Alice, Hysteria Alice, and the Purple Vortex for a cleaner design.
 
 
 ### Technical Discussions about the topic (Cache Coherence)
@@ -47,8 +47,7 @@ This README serves as the incremental development log for our exhibit, Alice Thr
 
 ---
 
-## Title of Project:
-## Alice Through the Snooping Bus: A Wonderland of Cache Coherence
+## Title of Project: #Alice Through the Snooping Bus: A Wonderland of Cache Coherence
 
 ## Project Theme:
 Cache Coherence (MESI Protocol). Our exhibit will explore how multi-core processors communicate to maintain data consistency, using American McGee’s Alice and Alice: Madness Returns video games as a guiding metaphor. <br><br> The core mechanism we wish to explain is the Snooping Bus, which is a broadcast medium where cores announce their memory operations for all processors to observe. In our exhibit, the two “cores” are Classic Alice and Hysteria Alice—two personalities inhabiting the same mind (shared Main Memory). <br><br> When Hysteria Alice corrupts a memory (Write), she broadcasts this corruption across the looking-glass snooping bus. <br> Classic Alice snoops this broadcast and is forced to instantly invalidate her old, happy memory to prevent cognitive dissonance. <br><br>With this simulation, users take on the roles of both personalities, selecting Remember (Read) and Corrupt (Write) commands, and sending shattered memories across the looking-glass snooping bus, triggering real-time MESI state transitions that demonstrate the cost and necessity of cache coherence.
